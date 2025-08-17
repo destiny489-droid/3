@@ -1,0 +1,33 @@
+name: 🔍 Security Scan - CodeQL
+
+on: 
+  push:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 0 * * *' # Scansione giornaliera a mezzanotte
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    
+    steps:
+    - name: 🛬 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🚀 Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+        config-file: ./.github/codeql/codeql-config.yml # File configurazione avanzata
+        
+    - name: ⚙️ Build Code (if needed)
+      run: |
+        echo "Simulazione build"
+        # Qui inseriresti comandi reali: npm install, mvn compile, ecc.
+        
+    - name: 🔬 Run Analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "Security Scan/${{ github.workflow }}"
